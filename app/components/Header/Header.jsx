@@ -1,5 +1,5 @@
 import Image from "next/image";
-import headerModule from "./Header.module.scss";
+import headerStyles from "./Header.module.scss";
 import { Anton, Manrope } from "next/font/google";
 
 const anton = Anton({
@@ -14,30 +14,30 @@ const manrope = Manrope({
 
 export default function Header() {
   return (
-    <header className={headerModule.header}>
+    <header className={headerStyles.header}>
       <img
-        className={headerModule.banner}
+        className={headerStyles.banner}
         src="/bannerImg.png"
         alt="Header Image"
       />
       <Image
-        className={headerModule.logo}
+        className={headerStyles.logo}
         src="/logo.png"
         alt="Logo"
         width={250}
         height={250}
       />
-      <h1 className={headerModule.title + " " + anton.className}>
+      <h1 className={headerStyles.title + " " + anton.className}>
         Découvrez nos recettes du quotidien, simples et délicieuses
       </h1>
-      <form className={headerModule.searchForm} action="#" method="get">
+      <form className={headerStyles.searchForm} action="#" method="get">
         <div>
           <input
-            className={headerModule.searchBar + " " + manrope.className}
+            className={headerStyles.searchBar + " " + manrope.className}
             type="text"
             placeholder="Rechercher une recette, un ingrédient, ..."
           />
-          <button type="submit" className={headerModule.searchBtn}>
+          <button type="submit" className={headerStyles.searchBtn}>
             <i className="fa-solid fa-magnifying-glass"></i>
           </button>
         </div>

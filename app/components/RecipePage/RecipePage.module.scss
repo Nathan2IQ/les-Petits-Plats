@@ -1,0 +1,77 @@
+.recipePageContainer {
+  display: flex;
+  justify-content: space-between;
+  margin: 40px 0;
+  background-color: white;
+
+  .recipeImageWrapper {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+
+    .recipeImage {
+      width: 600px;
+      height: 730px;
+      border-radius: 15px;
+      object-fit: cover;
+    }
+  }
+
+  .recipeInfo {
+    width: 60%;
+
+    h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #7a7a7a;
+      text-transform: uppercase;
+      padding: 30px 0 10px 0;
+    }
+
+    .recipeTitle {
+      font-size: 26px;
+      margin-bottom: 20px;
+    }
+
+    .recipeTime {
+      span {
+        background: #ffd600;
+        border-radius: 20px;
+        padding: 0.2em 0.8em;
+        font-weight: 400;
+        color: #222;
+      }
+    }
+
+    .recipeIngredientsCtn {
+      .recipeUl {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 10px 0 0 0;
+
+        .recipeLi {
+          display: flex;
+          flex-direction: column;
+          width: 30%;
+          box-sizing: border-box;
+          padding: 5px 0;
+
+          .ingredientName {
+            font-size: 14px;
+            font-weight: 500;
+          }
+
+          .ingredientQuantity {
+            color: #7a7a7a;
+            font-size: 14px;
+            font-weight: 400;
+          }
+        }
+      }
+    }
+
+    .recipeSection {
+      width: 60%;
+    }
+  }
+}

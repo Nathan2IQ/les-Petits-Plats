@@ -18,7 +18,7 @@ export default function Recipes() {
     <section className={recipesStyles.recipesSection}>
       {recipes.map((recipe) => (
         <article key={recipe.id} className={recipesStyles.recipeCard}>
-          <Link href="#">
+          <Link href={`/recipes/${recipe.slug}`}>
             <div className={recipesStyles.imageWrapper}>
               <Image
                 src={`/img-recipes/${recipe.image}`}

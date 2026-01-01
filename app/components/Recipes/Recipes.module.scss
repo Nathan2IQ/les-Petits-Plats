@@ -54,6 +54,10 @@
       .recipeDetails {
         margin: 10px 0 20px 0;
         font-size: 14px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* nombre de lignes max */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
 
       .recipeH3 {

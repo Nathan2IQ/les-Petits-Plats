@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import recipes from "@/data/recipes.json";
 import styles from "./RecipePage.module.scss";
+import NotFound from "../NotFound/NotFound.jsx";
 
 import { Anton, Manrope } from "next/font/google";
 
@@ -23,8 +24,7 @@ export default function RecipePage() {
   // Recherche la recette correspondante dans le JSON
   const recipe = recipes.find((r) => r.slug === slug);
 
-  if (!recipe)
-    return <div className={styles.notFound}>Recette introuvable.</div>;
+  if (!recipe) return <NotFound />;
 
   // Pour compatibilité, certains champs peuvent différer dans le JSON
   const appliances =

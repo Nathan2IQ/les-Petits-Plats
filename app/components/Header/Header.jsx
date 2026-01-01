@@ -25,7 +25,7 @@ export default function Header() {
         src="/logo.png"
         alt="Logo"
         width={250}
-        height={250}
+        height={30}
       />
       <h1 className={headerStyles.title + " " + anton.className}>
         Découvrez nos recettes du quotidien, simples et délicieuses

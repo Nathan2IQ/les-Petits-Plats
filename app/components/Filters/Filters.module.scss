@@ -7,35 +7,128 @@
   .selectWrapper {
     position: relative;
     width: 200px;
-  }
 
-  .selectIngredient,
-  .selectAppliance,
-  .selectUstensil {
-    background: white;
-    border: none;
-    border-radius: 10px;
-    padding: 15px 40px 15px 15px;
-    font-size: 16px;
-    width: 100%;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    cursor: pointer;
-  }
+    .customSelect {
+      position: relative;
+      width: 100%;
 
-  .selectWrapper i {
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: black;
-    font-size: 14px;
+      .selectHeader {
+        background: white;
+        border-radius: 10px;
+        padding: 15px 40px 15px 15px;
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        i {
+          position: absolute;
+          right: 16px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: black;
+          font-size: 14px;
+        }
+      }
+    }
   }
 
   .totalRecettes {
     margin-left: auto;
     font-size: 20px;
     color: #333;
+  }
+}
+
+.dropdown {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-radius: 0 0 10px 10px;
+  z-index: 10;
+  padding: 10px 0 5px 0;
+  max-height: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  .inputWrapper {
+    position: relative;
+    width: 85%;
+    margin: auto;
+
+    i {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      color: #aaa;
+      font-size: 14px;
+    }
+  }
+
+  .searchInput {
+    width: 80%;
+    margin: 0 auto 8px auto;
+    padding: 8px 12px;
+    border: 1px solid #e0e0e0;
+    font-size: 14px;
+    outline: none;
+    display: block;
+  }
+
+  .optionsList {
+    max-height: 140px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    /* Masquer la scrollbar pour Chrome, Edge, Safari */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+  }
+  .optionsList::-webkit-scrollbar {
+    display: none;
+  }
+
+  .option {
+    padding: 8px 20px;
+    cursor: pointer;
+    font-size: 15px;
+    &:hover {
+      background: #ffd15b;
+    }
+  }
+}
+
+.noOption {
+  color: #aaa;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 14px;
+}
+
+.selectedTag {
+  margin-top: 10px;
+  background: #ffd15b;
+  color: black;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 15px 15px 15px;
+  font-size: 16px;
+
+  i {
+    margin-left: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    color: black;
+    font-weight: bold;
+    &:hover {
+      color: red;
+    }
   }
 }

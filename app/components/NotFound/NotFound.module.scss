@@ -1,0 +1,40 @@
+.notFound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .banner {
+    width: 100%;
+    height: 761px;
+    object-fit: cover;
+  }
+
+  .logo {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    h1 {
+      color: #ffd15b;
+      font-size: 70px;
+      margin-bottom: 20px;
+    }
+
+    p {
+      color: white;
+      font-size: 40px;
+      margin-bottom: 30px;
+    }
+  }
+}

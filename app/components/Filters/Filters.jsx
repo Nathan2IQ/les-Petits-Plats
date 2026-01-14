@@ -2,7 +2,7 @@
 
 import filtersStyles from "./Filters.module.scss";
 import { Anton } from "next/font/google";
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 
 const anton = Anton({
   subsets: ["latin"],
@@ -10,241 +10,249 @@ const anton = Anton({
 });
 
 export default function Filters({
-  selectedIngredient,
-  setSelectedIngredient,
-  selectedUstensil,
-  setSelectedUstensil,
-  selectedAppliance,
-  setSelectedAppliance,
   recipes,
   filteredCount,
+  selectedIngredients,
+  setSelectedIngredients,
+  selectedUstensils,
+  setSelectedUstensils,
+  selectedAppliances,
+  setSelectedAppliances,
+  searchTerm = "",
 }) {
-  // --- 1. Création des listes uniques ---
-  const ingredients = useMemo(
-    () =>
-      recipes
-        .flatMap((recipe) => recipe.ingredients ?? [])
-        .map((ing) => ing.ingredient)
-        .filter((v, i, self) => self.indexOf(v) === i),
-    [recipes]
-  );
-
-  const ustensils = useMemo(
-    () =>
-      recipes
-        .flatMap((recipe) => recipe.ustensils ?? [])
-        .filter((v, i, self) => self.indexOf(v) === i),
-    [recipes]
-  );
-
-  const appliances = useMemo(
-    () =>
-      recipes
-        .map((recipe) => recipe.appliance)
-        .filter((v, i, self) => self.indexOf(v) === i),
-    [recipes]
-  );
-
-  // --- States pour le filtre ustensiles ---
-  const [openUstensil, setOpenUstensil] = useState(false);
-  const [ustensilSearch, setUstensilSearch] = useState("");
-  const filteredUstensils = useMemo(
-    () =>
-      ustensils.filter((ust) =>
-        ust.toLowerCase().includes(ustensilSearch.toLowerCase())
-      ),
-    [ustensils, ustensilSearch]
-  );
-  // --- States pour le filtre appareils ---
-  const [openAppliance, setOpenAppliance] = useState(false);
-  const [applianceSearch, setApplianceSearch] = useState("");
-  const filteredAppliances = useMemo(
-    () =>
-      appliances.filter((app) =>
-        app.toLowerCase().includes(applianceSearch.toLowerCase())
-      ),
-    [appliances, applianceSearch]
-  );
-
-  // --- States pour le filtre ingrédients ---
-  const [openIngredient, setOpenIngredient] = useState(false);
   const [ingredientSearch, setIngredientSearch] = useState("");
-  const filteredIngredients = useMemo(
-    () =>
-      ingredients.filter((ing) =>
-        ing.toLowerCase().includes(ingredientSearch.toLowerCase())
-      ),
-    [ingredients, ingredientSearch]
-  );
+  const [applianceSearch, setApplianceSearch] = useState("");
+  const [ustensilSearch, setUstensilSearch] = useState("");
+  const [openIngredient, setOpenIngredient] = useState(false);
+  const [openAppliance, setOpenAppliance] = useState(false);
+  const [openUstensil, setOpenUstensil] = useState(false);
+  const ingredientRef = useRef(null);
+  const applianceRef = useRef(null);
+  const ustensilRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        openIngredient &&
+        ingredientRef.current &&
+        !ingredientRef.current.contains(event.target)
+      ) {
+        setOpenIngredient(false);
+      }
+      if (
+        openAppliance &&
+        applianceRef.current &&
+        !applianceRef.current.contains(event.target)
+      ) {
+        setOpenAppliance(false);
+      }
+      if (
+        openUstensil &&
+        ustensilRef.current &&
+        !ustensilRef.current.contains(event.target)
+      ) {
+        setOpenUstensil(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openIngredient, openAppliance, openUstensil]);
+
+  const lowerSearch = searchTerm.trim().toLowerCase();
+  const filterByMainSearch = (value) =>
+    lowerSearch.length < 3 || value.toLowerCase().includes(lowerSearch);
+
+  const ingredients = useMemo(() => {
+    const all = recipes.flatMap((r) =>
+      (r.ingredients ?? []).map((i) => i.ingredient)
+    );
+    return [...new Set(all)].filter(
+      (i) =>
+        !selectedIngredients.includes(i) &&
+        i.toLowerCase().includes(ingredientSearch.toLowerCase()) &&
+        filterByMainSearch(i)
+    );
+  }, [recipes, selectedIngredients, ingredientSearch, searchTerm]);
+
+  const appliances = useMemo(() => {
+    const all = recipes.map((r) => r.appliance);
+    return [...new Set(all)].filter(
+      (a) =>
+        !selectedAppliances.includes(a) &&
+        a.toLowerCase().includes(applianceSearch.toLowerCase()) &&
+        filterByMainSearch(a)
+    );
+  }, [recipes, selectedAppliances, applianceSearch, searchTerm]);
+
+  const ustensils = useMemo(() => {
+    const all = recipes.flatMap((r) => r.ustensils ?? []);
+    return [...new Set(all)].filter(
+      (u) =>
+        !selectedUstensils.includes(u) &&
+        u.toLowerCase().includes(ustensilSearch.toLowerCase()) &&
+        filterByMainSearch(u)
+    );
+  }, [recipes, selectedUstensils, ustensilSearch, searchTerm]);
 
   return (
     <div className={filtersStyles.filtersContainer}>
-      {/* --- 2. Filtre ingrédients --- */}
-      <div className={filtersStyles.selectWrapper}>
-        <div className={filtersStyles.customSelect} tabIndex={0}>
+      <div className={filtersStyles.filtersRow}>
+        {/* --- 1. Filtre ingrédients --- */}
+        <div className={filtersStyles.selectWrapper}>
           <div
-            className={filtersStyles.selectHeader}
-            onClick={() => setOpenIngredient((open) => !open)}
+            className={filtersStyles.customSelect}
+            tabIndex={0}
+            ref={ingredientRef}
           >
-            Ingrédients
-            <i className="fa-solid fa-chevron-down"></i>
-          </div>
-          {openIngredient && (
-            <div className={filtersStyles.dropdown}>
-              <div className={filtersStyles.inputWrapper}>
-                <i className="fa fa-search" />
-                <input
-                  type="text"
-                  className={filtersStyles.searchInput}
-                  value={ingredientSearch}
-                  onChange={(e) => setIngredientSearch(e.target.value)}
-                  autoFocus
-                />
-              </div>
-              <div className={filtersStyles.optionsList}>
-                {filteredIngredients.length > 0 ? (
-                  filteredIngredients.map((ingredient) => (
-                    <div
-                      key={ingredient}
-                      className={filtersStyles.option}
-                      onClick={() => {
-                        setSelectedIngredient(ingredient);
-                        setOpenIngredient(false);
-                        setIngredientSearch("");
-                      }}
-                    >
-                      {ingredient}
-                    </div>
-                  ))
-                ) : (
-                  <div className={filtersStyles.noOption}>Aucun ingrédient</div>
-                )}
-              </div>
+            <div
+              className={filtersStyles.selectHeader}
+              onClick={() => setOpenIngredient((open) => !open)}
+            >
+              Ingrédients <i className="fa-solid fa-chevron-down"></i>
             </div>
-          )}
-        </div>
-        {selectedIngredient && (
-          <div className={filtersStyles.selectedTag}>
-            {selectedIngredient}
-            <i
-              className="fa-solid fa-x"
-              onClick={() => setSelectedIngredient("")}
-            ></i>
+            {openIngredient && (
+              <div className={filtersStyles.dropdown}>
+                <div className={filtersStyles.inputWrapper}>
+                  <i className="fa fa-search" />
+                  <input
+                    type="text"
+                    className={filtersStyles.searchInput}
+                    value={ingredientSearch}
+                    onChange={(e) => setIngredientSearch(e.target.value)}
+                    autoFocus
+                  />
+                </div>
+                <div className={filtersStyles.optionsList}>
+                  {ingredients.length > 0 ? (
+                    ingredients.map((ingredient) => (
+                      <div
+                        key={ingredient}
+                        className={filtersStyles.option}
+                        onClick={() => {
+                          setSelectedIngredients((prev) => [
+                            ...prev,
+                            ingredient,
+                          ]);
+                          setOpenIngredient(false);
+                          setIngredientSearch("");
+                        }}
+                      >
+                        {ingredient}
+                      </div>
+                    ))
+                  ) : (
+                    <div className={filtersStyles.noOption}>
+                      Aucun ingrédient
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </div>
 
-      {/* --- 3. Filtre appareils --- */}
-      <div className={filtersStyles.selectWrapper}>
-        <div className={filtersStyles.customSelect} tabIndex={0}>
+        {/* --- 2. Filtre appareils --- */}
+        <div className={filtersStyles.selectWrapper}>
           <div
-            className={filtersStyles.selectHeader}
-            onClick={() => setOpenAppliance((open) => !open)}
+            className={filtersStyles.customSelect}
+            tabIndex={0}
+            ref={applianceRef}
           >
-            Appareils
-            <i className="fa-solid fa-chevron-down"></i>
-          </div>
-          {openAppliance && (
-            <div className={filtersStyles.dropdown}>
-              <div className={filtersStyles.inputWrapper}>
-                <i className="fa fa-search" />
-                <input
-                  type="text"
-                  className={filtersStyles.searchInput}
-                  value={applianceSearch}
-                  onChange={(e) => setApplianceSearch(e.target.value)}
-                  autoFocus
-                />
-              </div>
-              <div className={filtersStyles.optionsList}>
-                {filteredAppliances.length > 0 ? (
-                  filteredAppliances.map((appliance) => (
-                    <div
-                      key={appliance}
-                      className={filtersStyles.option}
-                      onClick={() => {
-                        setSelectedAppliance(appliance);
-                        setOpenAppliance(false);
-                        setApplianceSearch("");
-                      }}
-                    >
-                      {appliance}
-                    </div>
-                  ))
-                ) : (
-                  <div className={filtersStyles.noOption}>Aucun appareil</div>
-                )}
-              </div>
+            <div
+              className={filtersStyles.selectHeader}
+              onClick={() => setOpenAppliance((open) => !open)}
+            >
+              Appareils <i className="fa-solid fa-chevron-down"></i>
             </div>
-          )}
-        </div>
-        {selectedAppliance && (
-          <div className={filtersStyles.selectedTag}>
-            {selectedAppliance}
-            <i
-              className="fa-solid fa-x"
-              onClick={() => setSelectedAppliance("")}
-            ></i>
+            {openAppliance && (
+              <div className={filtersStyles.dropdown}>
+                <div className={filtersStyles.inputWrapper}>
+                  <i className="fa fa-search" />
+                  <input
+                    type="text"
+                    className={filtersStyles.searchInput}
+                    value={applianceSearch}
+                    onChange={(e) => setApplianceSearch(e.target.value)}
+                    autoFocus
+                  />
+                </div>
+                <div className={filtersStyles.optionsList}>
+                  {appliances.length > 0 ? (
+                    appliances.map((appliance) => (
+                      <div
+                        key={appliance}
+                        className={filtersStyles.option}
+                        onClick={() => {
+                          setSelectedAppliances((prev) => [...prev, appliance]);
+                          setOpenAppliance(false);
+                          setApplianceSearch("");
+                        }}
+                      >
+                        {appliance}
+                      </div>
+                    ))
+                  ) : (
+                    <div className={filtersStyles.noOption}>Aucun appareil</div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </div>
 
-      {/* --- 4. Filtre ustensiles --- */}
-      <div className={filtersStyles.selectWrapper}>
-        <div className={filtersStyles.customSelect} tabIndex={0}>
+        {/* --- 3. Filtre ustensiles --- */}
+        <div className={filtersStyles.selectWrapper}>
           <div
-            className={filtersStyles.selectHeader}
-            onClick={() => setOpenUstensil((open) => !open)}
+            className={filtersStyles.customSelect}
+            tabIndex={0}
+            ref={ustensilRef}
           >
-            Ustensiles
-            <i className="fa-solid fa-chevron-down"></i>
-          </div>
-          {openUstensil && (
-            <div className={filtersStyles.dropdown}>
-              <div className={filtersStyles.inputWrapper}>
-                <i className="fa fa-search" />
-                <input
-                  type="text"
-                  className={filtersStyles.searchInput}
-                  value={ustensilSearch}
-                  onChange={(e) => setUstensilSearch(e.target.value)}
-                  autoFocus
-                />
-              </div>
-              <div className={filtersStyles.optionsList}>
-                {filteredUstensils.length > 0 ? (
-                  filteredUstensils.map((ustensil) => (
-                    <div
-                      key={ustensil}
-                      className={filtersStyles.option}
-                      onClick={() => {
-                        setSelectedUstensil(ustensil);
-                        setOpenUstensil(false);
-                        setUstensilSearch("");
-                      }}
-                    >
-                      {ustensil}
-                    </div>
-                  ))
-                ) : (
-                  <div className={filtersStyles.noOption}>Aucun ustensile</div>
-                )}
-              </div>
+            <div
+              className={filtersStyles.selectHeader}
+              onClick={() => setOpenUstensil((open) => !open)}
+            >
+              Ustensiles <i className="fa-solid fa-chevron-down"></i>
             </div>
-          )}
-        </div>
-        {selectedUstensil && (
-          <div className={filtersStyles.selectedTag}>
-            {selectedUstensil}
-            <i
-              className="fa-solid fa-x"
-              onClick={() => setSelectedUstensil("")}
-            ></i>
+            {openUstensil && (
+              <div className={filtersStyles.dropdown}>
+                <div className={filtersStyles.inputWrapper}>
+                  <i className="fa fa-search" />
+                  <input
+                    type="text"
+                    className={filtersStyles.searchInput}
+                    value={ustensilSearch}
+                    onChange={(e) => setUstensilSearch(e.target.value)}
+                    autoFocus
+                  />
+                </div>
+                <div className={filtersStyles.optionsList}>
+                  {ustensils.length > 0 ? (
+                    ustensils.map((ustensil) => (
+                      <div
+                        key={ustensil}
+                        className={filtersStyles.option}
+                        onClick={() => {
+                          setSelectedUstensils((prev) => [...prev, ustensil]);
+                          setOpenUstensil(false);
+                          setUstensilSearch("");
+                        }}
+                      >
+                        {ustensil}
+                      </div>
+                    ))
+                  ) : (
+                    <div className={filtersStyles.noOption}>
+                      Aucun ustensile
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
-
-      {/* --- 5. Affichage du total de recettes filtrées --- */}
       <div className={filtersStyles.totalRecettes} style={anton.style}>
         {filteredCount} recette{filteredCount > 1 ? "s" : ""}
       </div>

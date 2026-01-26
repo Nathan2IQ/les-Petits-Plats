@@ -45,7 +45,7 @@ export default function Header({ searchTerm, onSearchTermChange }) {
       />
       <Image
         className={headerStyles.logo}
-        src="/logo.png"
+        src="/Logo.png"
         alt="Logo"
         width={250}
         height={30}

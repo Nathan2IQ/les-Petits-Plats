@@ -1,12 +1,19 @@
+// -----------------------------------------------------------------------------
+// Composant RecipePage
+// Affiche le détail d'une recette selon le slug dans l'URL
+// - Cherche la recette dans le JSON
+// - Affiche image, titre, temps, ingrédients, ustensiles, appareils nécessaires
+// -----------------------------------------------------------------------------
+
 "use client";
 
 import { useParams } from "next/navigation";
 import recipes from "@/data/recipes.json";
 import styles from "./RecipePage.module.scss";
 import NotFound from "../NotFound/NotFound.jsx";
-
 import { Anton, Manrope } from "next/font/google";
 
+// Chargement des polices Google
 const anton = Anton({
   subsets: ["latin"],
   weight: ["400"],
@@ -24,6 +31,7 @@ export default function RecipePage() {
   // Recherche la recette correspondante dans le JSON
   const recipe = recipes.find((r) => r.slug === slug);
 
+  // Si la recette n'existe pas, affiche NotFound
   if (!recipe) return <NotFound />;
 
   // Pour compatibilité, certains champs peuvent différer dans le JSON
@@ -31,6 +39,7 @@ export default function RecipePage() {
     recipe.appliances || (recipe.appliance ? [recipe.appliance] : []);
   const utensils = recipe.utensils || recipe.ustensils || [];
 
+  // Affichage principal de la page recette
   return (
     <div className={styles.recipePageContainer}>
       {/* Image à gauche */}
@@ -76,6 +85,7 @@ export default function RecipePage() {
           </ul>
         </div>
 
+        {/* Ustensiles nécessaires */}
         {utensils.length > 0 && (
           <div className={styles.recipeSection}>
             <h2 style={manrope.style}>Ustensiles nécessaires</h2>
@@ -89,6 +99,7 @@ export default function RecipePage() {
           </div>
         )}
 
+        {/* Appareils nécessaires */}
         {appliances.length > 0 && (
           <div className={styles.recipeSection}>
             <h2 style={manrope.style}>Appareils nécessaires</h2>

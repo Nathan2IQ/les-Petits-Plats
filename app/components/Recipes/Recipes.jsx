@@ -1,8 +1,13 @@
+// -----------------------------------------------------------------------------
+// Composant Recipes
+// Affiche la liste des recettes sous forme de cartes avec image, nom, description, temps et ingrédients
+// -----------------------------------------------------------------------------
 import Link from "next/link";
 import recipesStyles from "./Recipes.module.scss";
 import Image from "next/image";
 import { Anton, Manrope } from "next/font/google";
 
+// Chargement des polices Google
 const anton = Anton({
   subsets: ["latin"],
   weight: ["400"],
@@ -12,15 +17,18 @@ const manrope = Manrope({
   subsets: ["latin"],
 });
 
+// Affiche la liste des recettes reçues en props
 export default function Recipes({ recipes }) {
   return (
     <section className={recipesStyles.recipesSection}>
+      {/* Pour chaque recette, affiche une carte */}
       {recipes.map(
         (
-          recipe // Updated to use props
+          recipe, // Objet recette
         ) => (
           <article key={recipe.id} className={recipesStyles.recipeCard}>
             <Link href={`/recipes/${recipe.slug}`}>
+              {/* Image de la recette */}
               <div className={recipesStyles.imageWrapper}>
                 <Image
                   src={`/img-recipes/${recipe.image}`}
@@ -29,6 +37,7 @@ export default function Recipes({ recipes }) {
                   width={400}
                   height={100}
                 />
+                {/* Badge du temps de préparation */}
                 <span
                   className={recipesStyles.recipeTimeBadge}
                   style={manrope.style}
@@ -36,6 +45,7 @@ export default function Recipes({ recipes }) {
                   {recipe.time} min
                 </span>
               </div>
+              {/* Infos recette */}
               <div className={recipesStyles.recipeInfo}>
                 <h2 className={recipesStyles.recipeName} style={anton.style}>
                   {recipe.name}
@@ -49,6 +59,7 @@ export default function Recipes({ recipes }) {
                 >
                   {recipe.description}
                 </p>
+                {/* Liste des ingrédients */}
                 <div className={recipesStyles.recipeIngredientsCtn}>
                   <h3 className={recipesStyles.recipeH3} style={manrope.style}>
                     Ingrédients
@@ -76,7 +87,7 @@ export default function Recipes({ recipes }) {
               </div>
             </Link>
           </article>
-        )
+        ),
       )}
     </section>
   );

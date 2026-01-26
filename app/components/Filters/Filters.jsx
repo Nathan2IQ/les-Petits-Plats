@@ -1,9 +1,15 @@
+// -----------------------------------------------------------------------------
+// Composant Filters
+// Affiche les filtres multi-tags (ingrédients, appareils, ustensiles) avec recherche locale
+// Gère l'ouverture/fermeture des menus, la sélection et la recherche dans chaque filtre
+// -----------------------------------------------------------------------------
 "use client";
 
 import filtersStyles from "./Filters.module.scss";
 import { Anton } from "next/font/google";
 import { useState, useEffect, useMemo, useRef } from "react";
 
+// Chargement de la police Anton
 const anton = Anton({
   subsets: ["latin"],
   weight: ["400"],
@@ -20,6 +26,7 @@ export default function Filters({
   setSelectedAppliances,
   searchTerm = "",
 }) {
+  // États pour la recherche locale et l'ouverture des menus
   const [ingredientSearch, setIngredientSearch] = useState("");
   const [applianceSearch, setApplianceSearch] = useState("");
   const [ustensilSearch, setUstensilSearch] = useState("");
@@ -30,6 +37,7 @@ export default function Filters({
   const applianceRef = useRef(null);
   const ustensilRef = useRef(null);
 
+  // Ferme les menus si clic en dehors
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -60,35 +68,39 @@ export default function Filters({
     };
   }, [openIngredient, openAppliance, openUstensil]);
 
+  // Liste des ingrédients filtrés selon la recherche locale et les tags déjà sélectionnés
   const ingredients = useMemo(() => {
     const all = recipes.flatMap((r) =>
-      (r.ingredients ?? []).map((i) => i.ingredient)
+      (r.ingredients ?? []).map((i) => i.ingredient),
     );
     return [...new Set(all)].filter(
       (i) =>
         !selectedIngredients.includes(i) &&
-        i.toLowerCase().includes(ingredientSearch.toLowerCase())
+        i.toLowerCase().includes(ingredientSearch.toLowerCase()),
     );
   }, [recipes, selectedIngredients, ingredientSearch]);
 
+  // Liste des appareils filtrés
   const appliances = useMemo(() => {
     const all = recipes.map((r) => r.appliance);
     return [...new Set(all)].filter(
       (a) =>
         !selectedAppliances.includes(a) &&
-        a.toLowerCase().includes(applianceSearch.toLowerCase())
+        a.toLowerCase().includes(applianceSearch.toLowerCase()),
     );
   }, [recipes, selectedAppliances, applianceSearch]);
 
+  // Liste des ustensiles filtrés
   const ustensils = useMemo(() => {
     const all = recipes.flatMap((r) => r.ustensils ?? []);
     return [...new Set(all)].filter(
       (u) =>
         !selectedUstensils.includes(u) &&
-        u.toLowerCase().includes(ustensilSearch.toLowerCase())
+        u.toLowerCase().includes(ustensilSearch.toLowerCase()),
     );
   }, [recipes, selectedUstensils, ustensilSearch]);
 
+  // Affichage des filtres
   return (
     <div className={filtersStyles.filtersContainer}>
       <div className={filtersStyles.filtersRow}>

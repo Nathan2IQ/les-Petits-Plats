@@ -60,10 +60,6 @@ export default function Filters({
     };
   }, [openIngredient, openAppliance, openUstensil]);
 
-  const lowerSearch = searchTerm.trim().toLowerCase();
-  const filterByMainSearch = (value) =>
-    lowerSearch.length < 3 || value.toLowerCase().includes(lowerSearch);
-
   const ingredients = useMemo(() => {
     const all = recipes.flatMap((r) =>
       (r.ingredients ?? []).map((i) => i.ingredient)
@@ -71,30 +67,27 @@ export default function Filters({
     return [...new Set(all)].filter(
       (i) =>
         !selectedIngredients.includes(i) &&
-        i.toLowerCase().includes(ingredientSearch.toLowerCase()) &&
-        filterByMainSearch(i)
+        i.toLowerCase().includes(ingredientSearch.toLowerCase())
     );
-  }, [recipes, selectedIngredients, ingredientSearch, searchTerm]);
+  }, [recipes, selectedIngredients, ingredientSearch]);
 
   const appliances = useMemo(() => {
     const all = recipes.map((r) => r.appliance);
     return [...new Set(all)].filter(
       (a) =>
         !selectedAppliances.includes(a) &&
-        a.toLowerCase().includes(applianceSearch.toLowerCase()) &&
-        filterByMainSearch(a)
+        a.toLowerCase().includes(applianceSearch.toLowerCase())
     );
-  }, [recipes, selectedAppliances, applianceSearch, searchTerm]);
+  }, [recipes, selectedAppliances, applianceSearch]);
 
   const ustensils = useMemo(() => {
     const all = recipes.flatMap((r) => r.ustensils ?? []);
     return [...new Set(all)].filter(
       (u) =>
         !selectedUstensils.includes(u) &&
-        u.toLowerCase().includes(ustensilSearch.toLowerCase()) &&
-        filterByMainSearch(u)
+        u.toLowerCase().includes(ustensilSearch.toLowerCase())
     );
-  }, [recipes, selectedUstensils, ustensilSearch, searchTerm]);
+  }, [recipes, selectedUstensils, ustensilSearch]);
 
   return (
     <div className={filtersStyles.filtersContainer}>

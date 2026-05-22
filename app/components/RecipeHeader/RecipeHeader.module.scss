@@ -12,4 +12,30 @@
     top: 50px;
     left: 50px;
   }
+
+  // Responsive Tablette
+  @media (max-width: 1024px) {
+    .banner {
+      height: 100px;
+    }
+
+    .logo {
+      top: 35px;
+      left: 30px;
+      width: 50px;
+    }
+  }
+
+  // Responsive Mobile
+  @media (max-width: 767px) {
+    .banner {
+      height: 80px;
+    }
+
+    .logo {
+      top: 25px;
+      left: 20px;
+      width: 40px;
+    }
+  }
 }

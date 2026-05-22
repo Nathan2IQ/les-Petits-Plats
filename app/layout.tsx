@@ -10,6 +10,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Les Petits Plats",
   description: "Découvrez nos recettes du quotidien, simples et délicieuses",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
 };
 
 // Composant layout racine qui enveloppe toute l'application

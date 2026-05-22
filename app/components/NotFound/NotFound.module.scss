@@ -37,4 +37,54 @@
       margin-bottom: 30px;
     }
   }
+
+  // Responsive Tablette
+  @media (max-width: 1024px) {
+    .banner {
+      height: 500px;
+    }
+
+    .logo {
+      top: 30px;
+      left: 30px;
+      width: 50px;
+    }
+
+    .content {
+      h1 {
+        font-size: 50px;
+      }
+
+      p {
+        font-size: 28px;
+        text-align: center;
+        padding: 0 20px;
+      }
+    }
+  }
+
+  // Responsive Mobile
+  @media (max-width: 767px) {
+    .banner {
+      height: 400px;
+    }
+
+    .logo {
+      top: 20px;
+      left: 20px;
+      width: 40px;
+    }
+
+    .content {
+      h1 {
+        font-size: 36px;
+      }
+
+      p {
+        font-size: 20px;
+        text-align: center;
+        padding: 0 15px;
+      }
+    }
+  }
 }

@@ -74,4 +74,100 @@
       width: 60%;
     }
   }
+
+  // Responsive Tablette
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    margin: 30px 20px;
+
+    .recipeImageWrapper {
+      width: 100%;
+      margin-bottom: 30px;
+
+      .recipeImage {
+        width: 100%;
+        max-width: 600px;
+        height: auto;
+        max-height: 500px;
+      }
+    }
+
+    .recipeInfo {
+      width: 100%;
+      padding: 0 20px;
+
+      h2 {
+        font-size: 14px;
+        padding: 20px 0 10px 0;
+      }
+
+      .recipeTitle {
+        font-size: 22px;
+      }
+
+      .recipeIngredientsCtn .recipeUl .recipeLi {
+        width: 50%;
+      }
+
+      .recipeSection {
+        width: 100%;
+      }
+    }
+  }
+
+  // Responsive Mobile
+  @media (max-width: 767px) {
+    flex-direction: column;
+    margin: 20px 15px;
+
+    .recipeImageWrapper {
+      width: 100%;
+      margin-bottom: 20px;
+
+      .recipeImage {
+        width: 100%;
+        height: auto;
+        max-height: 350px;
+        border-radius: 10px;
+      }
+    }
+
+    .recipeInfo {
+      width: 100%;
+      padding: 0 10px;
+
+      h2 {
+        font-size: 13px;
+        padding: 15px 0 8px 0;
+      }
+
+      .recipeTitle {
+        font-size: 20px;
+        margin-bottom: 15px;
+      }
+
+      .recipeTime span {
+        font-size: 14px;
+        padding: 0.2em 0.6em;
+      }
+
+      .recipeIngredientsCtn .recipeUl .recipeLi {
+        width: 100%;
+        padding: 4px 0;
+
+        .ingredientName {
+          font-size: 13px;
+        }
+
+        .ingredientQuantity {
+          font-size: 13px;
+        }
+      }
+
+      .recipeSection {
+        width: 100%;
+        font-size: 14px;
+      }
+    }
+  }
 }
